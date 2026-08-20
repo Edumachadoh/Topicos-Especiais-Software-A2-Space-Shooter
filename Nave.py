@@ -1,5 +1,7 @@
 import pygame
 from ElementoJogo import ElementoJogo
+from Projetil import Projetil
+
 
 class Nave(ElementoJogo):
     def __init__(self, largura_tela, altura_tela, velocidade=6, cor=(0, 255, 100)):
@@ -12,6 +14,7 @@ class Nave(ElementoJogo):
             cor=cor,
             velocidade=velocidade
         )
+
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela
         self.vel_x = 0
@@ -33,6 +36,10 @@ class Nave(ElementoJogo):
             elif evento.key in (pygame.K_RIGHT, pygame.K_d) and self.vel_x > 0:
                 self.vel_x = 0
 
+        elif evento.type == pygame.KEYDOWN:
+            if evento.key in pygame.K_SPACE:
+                self.atirar()
+
     def mover(self):
         """Aplica o deslocamento horizontal e trava nas bordas da tela."""
         self.rect.x += self.vel_x
@@ -47,6 +54,11 @@ class Nave(ElementoJogo):
         # TODO 1 (Alunos): Criar um projétil (pygame.Rect) saindo da ponta da nave
         # (ex: largura 4, altura 10) e adicioná-lo à lista self.tiros
         # =========================================================================
+
+        projetil = Projetil(self.rect.x, self.rect.y,self.largura_tela, self.altura_tela)
+
+        self.tiros.append(projetil)
+
         pass
 
     def atualizar_tiros(self):
