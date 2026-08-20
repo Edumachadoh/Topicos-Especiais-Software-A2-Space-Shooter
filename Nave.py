@@ -67,7 +67,22 @@ class Nave(ElementoJogo):
         # - Mover cada tiro da lista para cima (diminuir tiro.y)
         # - Remover da lista os tiros que saírem pelo topo da tela (tiro.bottom < 0)
         # =========================================================================
-        pass
+
+        # O [:] cria uma cópia da lista para o loop.
+        # Isso é fundamental porque não devemos modificar (remover itens) de uma lista enquanto a percorremos diretamente.
+        for tiro in self.tiros[:]:
+
+            # 1. Movimentação:
+            # No Pygame, o ponto (0,0) é o canto superior esquerdo.
+            # Para o tiro subir, a coordenada Y precisa diminuir.
+            # A velocidade do tiro é herdada de Projetil, pois o mesmo tem esse parâmetro em seu método construtor
+            tiro.rect.y -= tiro.velocidade
+
+            # 2. Limpeza de memória:
+            # Verifica se a base do retângulo passou do topo da tela
+            if tiro.rect.y < 0:
+                # Remove o tiro da lista original de tiros ativos
+                self.tiros.remove(tiro)
 
     def atualizar(self):
         self.mover()
