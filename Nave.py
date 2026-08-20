@@ -4,17 +4,19 @@ from Projetil import Projetil
 
 
 class Nave(ElementoJogo):
-    def __init__(self, largura_tela, altura_tela, velocidade=6, cor=(0, 255, 100)):
+    def __init__(self, largura_tela, altura_tela, velocidade=15, cor=(0, 255, 100)):
         # Inicializa a classe base com posição inicial centralizada embaixo
         super().__init__(
             x=largura_tela // 2 - 20,
-            y=altura_tela - 60,
+            y=altura_tela - 180,
             largura=40,
             altura=40,
             cor=cor,
             velocidade=velocidade
         )
 
+        # definir imagem da nave
+        self.image = pygame.image.load('Image\Spaceship.png').convert_alpha()
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela
         self.vel_x = 0
@@ -89,13 +91,7 @@ class Nave(ElementoJogo):
         self.atualizar_tiros()
 
     def desenhar(self, tela):
-        # Polimorfismo: desenha a nave em formato de triângulo
-        pontos = [
-            (self.rect.centerx, self.rect.top),
-            (self.rect.left, self.rect.bottom),
-            (self.rect.right, self.rect.bottom)
-        ]
-        pygame.draw.polygon(tela, self.cor, pontos)
+        tela.blit(self.image, self.rect)
 
         # Desenha os tiros ativos na cor branca
         for tiro in self.tiros:
