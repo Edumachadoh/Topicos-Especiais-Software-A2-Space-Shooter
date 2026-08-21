@@ -1,8 +1,7 @@
-from sys import exit
-
 import pygame
 from Nave import Nave
 from Asteroid import Asteroid
+
 
 class Jogo:
     def __init__(self, largura=800, altura=600):
@@ -55,8 +54,6 @@ class Jogo:
         pygame.display.flip()
 
     def executar(self):
-        pygame.display.set_caption("Space Shooter")
-        pygame.display.set_icon(pygame.image.load("icon.png"))
         while self.rodando:
             self.clock.tick(self.fps)
             self.processar_eventos()
@@ -64,7 +61,6 @@ class Jogo:
             self.desenhar()
 
         pygame.quit()
-        exit() #adicionei pois vi que precisa mas não tenho certeza
 
 
 if __name__ == "__main__":

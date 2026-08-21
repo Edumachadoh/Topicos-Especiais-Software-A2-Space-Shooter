@@ -3,8 +3,13 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
+<<<<<<< HEAD
     <orderEntry type="jdk" jdkName="~\Desktop\Topicos-Especiais-Software-A2-Space-Shooter\.venv" jdkType="Python SDK" />
+=======
+    <orderEntry type="jdk" jdkName="Python 3.10 (Topicos-Especiais-Software-A2-Space-Shooter)" jdkType="Python SDK" />
+>>>>>>> e2cab2f2cc66012d7c787ceefbc909afdaa2fc2e
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

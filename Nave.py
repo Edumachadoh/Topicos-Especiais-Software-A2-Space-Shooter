@@ -1,17 +1,22 @@
 import pygame
 from ElementoJogo import ElementoJogo
+from Projetil import Projetil
+
 
 class Nave(ElementoJogo):
-    def __init__(self, largura_tela, altura_tela, velocidade=6, cor=(0, 255, 100)):
+    def __init__(self, largura_tela, altura_tela, velocidade=15, cor=(0, 255, 100)):
         # Inicializa a classe base com posição inicial centralizada embaixo
         super().__init__(
             x=largura_tela // 2 - 20,
-            y=altura_tela - 60,
+            y=altura_tela - 180,
             largura=40,
             altura=40,
             cor=cor,
             velocidade=velocidade
         )
+
+        # definir imagem da nave
+        self.image = pygame.image.load('Image\Spaceship.png').convert_alpha()
         self.largura_tela = largura_tela
         self.altura_tela = altura_tela
         self.vel_x = 0
@@ -33,6 +38,10 @@ class Nave(ElementoJogo):
             elif evento.key in (pygame.K_RIGHT, pygame.K_d) and self.vel_x > 0:
                 self.vel_x = 0
 
+        elif evento.type == pygame.KEYDOWN:
+            if evento.key in pygame.K_SPACE:
+                self.atirar()
+
     def mover(self):
         """Aplica o deslocamento horizontal e trava nas bordas da tela."""
         self.rect.x += self.vel_x
@@ -47,6 +56,11 @@ class Nave(ElementoJogo):
         # TODO 1 (Alunos): Criar um projétil (pygame.Rect) saindo da ponta da nave
         # (ex: largura 4, altura 10) e adicioná-lo à lista self.tiros
         # =========================================================================
+
+        projetil = Projetil(self.rect.x, self.rect.y,self.largura_tela, self.altura_tela)
+
+        self.tiros.append(projetil)
+
         pass
 
     def atualizar_tiros(self):
@@ -55,20 +69,29 @@ class Nave(ElementoJogo):
         # - Mover cada tiro da lista para cima (diminuir tiro.y)
         # - Remover da lista os tiros que saírem pelo topo da tela (tiro.bottom < 0)
         # =========================================================================
-        pass
+
+        # O [:] cria uma cópia da lista para o loop.
+        # Isso é fundamental porque não devemos modificar (remover itens) de uma lista enquanto a percorremos diretamente.
+        for tiro in self.tiros[:]:
+
+            # 1. Movimentação:
+            # No Pygame, o ponto (0,0) é o canto superior esquerdo.
+            # Para o tiro subir, a coordenada Y precisa diminuir.
+            # A velocidade do tiro é herdada de Projetil, pois o mesmo tem esse parâmetro em seu método construtor
+            tiro.rect.y -= tiro.velocidade
+
+            # 2. Limpeza de memória:
+            # Verifica se a base do retângulo passou do topo da tela
+            if tiro.rect.y < 0:
+                # Remove o tiro da lista original de tiros ativos
+                self.tiros.remove(tiro)
 
     def atualizar(self):
         self.mover()
         self.atualizar_tiros()
 
     def desenhar(self, tela):
-        # Polimorfismo: desenha a nave em formato de triângulo
-        pontos = [
-            (self.rect.centerx, self.rect.top),
-            (self.rect.left, self.rect.bottom),
-            (self.rect.right, self.rect.bottom)
-        ]
-        pygame.draw.polygon(tela, self.cor, pontos)
+        tela.blit(self.image, self.rect)
 
         # Desenha os tiros ativos na cor branca
         for tiro in self.tiros:
