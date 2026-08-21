@@ -61,7 +61,6 @@ class Nave(ElementoJogo):
 
         self.tiros.append(projetil)
 
-        pass
 
     def atualizar_tiros(self):
         # =========================================================================

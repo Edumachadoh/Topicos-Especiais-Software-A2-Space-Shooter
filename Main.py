@@ -1,5 +1,3 @@
-from sys import exit
-
 import pygame
 from Nave import Nave
 from Asteroid import Asteroid
@@ -49,14 +47,14 @@ class Jogo:
         self.checar_colisoes()
 
     def desenhar(self):
-        self.tela.fill((15, 15, 25))
+        self.tela.fill((15, 15, 25)) #fundo
         self.nave.desenhar(self.tela)
         self.asteroide.desenhar(self.tela)
         pygame.display.flip()
 
     def executar(self):
         pygame.display.set_caption("Space Shooter")
-        pygame.display.set_icon(pygame.image.load("icon.png"))
+        pygame.display.set_icon(pygame.image.load("./Image/Spaceship.png"))
         while self.rodando:
             self.clock.tick(self.fps)
             self.processar_eventos()
@@ -64,7 +62,6 @@ class Jogo:
             self.desenhar()
 
         pygame.quit()
-        exit() #adicionei pois vi que precisa mas não tenho certeza
 
 
 if __name__ == "__main__":
