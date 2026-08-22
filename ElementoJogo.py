@@ -10,7 +10,6 @@ class ElementoJogo:
 
     def mover(self):
         """Método de movimentação a ser sobrescrito ou estendido pelas subclasses."""
-        pass
 
     def desenhar(self, tela):
         """Desenho padrão (retângulo) caso a subclasse não sobrescreva."""

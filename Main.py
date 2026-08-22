@@ -1,6 +1,7 @@
 import pygame
 
 from Asteroid import Asteroid
+from InterfaceVisual import InterfaceVisual
 from Nave import Nave
 
 
@@ -26,6 +27,7 @@ class Jogo:
         self.pontos = 0
 
         # Elementos do jogo
+        self.inteface_visual = InterfaceVisual()
         self.nave = Nave(self.largura, self.altura)
         self.asteroide = Asteroid(self.largura, self.altura)
 
@@ -33,16 +35,33 @@ class Jogo:
         for evento in pygame.event.get():   
             if evento.type == pygame.QUIT:
                 self.rodando = False
-            self.nave.processar_evento(evento)
+
+            #se não for fim de jogo ele recebe inputs
+            # se ele apertar R ele recomeça
+            # se apertar esc fecha o jogo
+            if not self.fim_de_jogo:
+                self.nave.processar_evento(evento)
+            else:
+                match(self.inteface_visual.processar_evento(evento)):
+                    case 1:
+                        self.fim_de_jogo = False
+                        self.pontos = 0
+                    case 2:
+                        self.rodando = False
+
+
 
     def checar_colisoes(self):
         #checagem de colisões
+
+        #vendo em cada tiro da nave se ele colidiu com o asteroide
         for tiro in self.nave.tiros[:]:
             if tiro.rect.colliderect(self.asteroide.rect):
                 self.nave.tiros.remove(tiro)
                 self.asteroide.iniciar_status()
                 self.pontos += 1
 
+        #se a nave acertar o asteroide, fim de jogo
         if self.nave.rect.colliderect(self.asteroide.rect):
             self.fim_de_jogo = True
 
@@ -52,13 +71,12 @@ class Jogo:
         self.checar_colisoes()
 
     def desenhar(self):
-        self.tela.fill((15, 15, 25))  # fundo
+        self.tela.fill((15, 15, 25))# fundo
+
+        self.inteface_visual.desenhar(self.pontos, self.altura, self.largura, self.tela, self.fim_de_jogo)
         self.nave.desenhar(self.tela)
         self.asteroide.desenhar(self.tela)
         pygame.display.flip()
-        # =========================================================================
-        # TODO 5 (Alunos): Implementar a exibição de pontos na tela
-        # =========================================================================
 
     def executar(self):
 
@@ -69,6 +87,7 @@ class Jogo:
             self.desenhar()
 
         pygame.quit()
+
 
 
 if __name__ == "__main__":
