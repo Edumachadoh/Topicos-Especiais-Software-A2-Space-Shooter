@@ -1,5 +1,6 @@
 import pygame
 
+
 class ElementoJogo:
     """Classe base para todos os objetos do jogo."""
     def __init__(self, x, y, largura, altura, cor=(255, 255, 255), velocidade=5):

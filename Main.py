@@ -1,18 +1,28 @@
 import pygame
-from Nave import Nave
+
 from Asteroid import Asteroid
+from Nave import Nave
+
 
 class Jogo:
     def __init__(self, largura=800, altura=600):
+        # Iniciando o pygame
         pygame.init()
+
+        # Configurações da tela
         self.largura = largura
         self.altura = altura
         self.tela = pygame.display.set_mode((self.largura, self.altura))
+
+        # mudando o icone e o título da tela
         pygame.display.set_caption("Space Shooter - Projeto Base")
+        icone = pygame.image.load("./Image/Spaceship.png").convert()
+        pygame.display.set_icon(icone)
 
         self.clock = pygame.time.Clock()
-        self.fps = 10
+        self.fps = 30
         self.rodando = True
+        self.fim_de_jogo = False
         self.pontos = 0
 
         # Elementos do jogo
@@ -20,26 +30,21 @@ class Jogo:
         self.asteroide = Asteroid(self.largura, self.altura)
 
     def processar_eventos(self):
-        for evento in pygame.event.get():
+        for evento in pygame.event.get():   
             if evento.type == pygame.QUIT:
                 self.rodando = False
             self.nave.processar_evento(evento)
 
     def checar_colisoes(self):
-        # =========================================================================
-        # TODO 4 (Alunos):
-        # A) Tiro vs Asteroide:
-        #    - Percorrer self.nave.tiros
-        #    - Se tiro.colliderect(self.asteroide.rect):
-        #        1. Remover o tiro da lista
-        #        2. Reiniciar o asteroide (self.asteroide.iniciar_status())
-        #        3. Incrementar self.pontos em 1
-        #
-        # B) Asteroide vs Nave:
-        #    - Se self.nave.rect.colliderect(self.asteroide.rect):
-        #        - Finalizar a partida (self.rodando = False ou reiniciar)
-        # =========================================================================
-        pass
+        #checagem de colisões
+        for tiro in self.nave.tiros[:]:
+            if tiro.rect.colliderect(self.asteroide.rect):
+                self.nave.tiros.remove(tiro)
+                self.asteroide.iniciar_status()
+                self.pontos += 1
+
+        if self.nave.rect.colliderect(self.asteroide.rect):
+            self.fim_de_jogo = True
 
     def atualizar(self):
         self.nave.atualizar()
@@ -47,14 +52,16 @@ class Jogo:
         self.checar_colisoes()
 
     def desenhar(self):
-        self.tela.fill((15, 15, 25)) #fundo
+        self.tela.fill((15, 15, 25))  # fundo
         self.nave.desenhar(self.tela)
         self.asteroide.desenhar(self.tela)
         pygame.display.flip()
+        # =========================================================================
+        # TODO 5 (Alunos): Implementar a exibição de pontos na tela
+        # =========================================================================
 
     def executar(self):
-        pygame.display.set_caption("Space Shooter")
-        pygame.display.set_icon(pygame.image.load("./Image/Spaceship.png"))
+
         while self.rodando:
             self.clock.tick(self.fps)
             self.processar_eventos()
